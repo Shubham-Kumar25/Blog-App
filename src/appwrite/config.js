@@ -1,12 +1,9 @@
 import conf from "../conf/conf.js";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
-export class Service {
-  client = new Client();
-  databases;
-  bucket;
-
+class Service {
   constructor() {
+    this.client = new Client();
     this.client
       .setEndpoint(conf.appwriteUrl)
       .setProject(conf.appwriteProjectId);
@@ -29,7 +26,8 @@ export class Service {
         }
       );
     } catch (error) {
-      console.log("Appwrite Service :: CreatePost :: error", error);
+      console.error("Error creating post:", error);
+      throw error;
     }
   }
 
@@ -42,7 +40,8 @@ export class Service {
         { title, content, featuredImage, status }
       );
     } catch (error) {
-      console.log("Appwrite Service :: UpdatePost :: error", error);
+      console.error("Error updating post:", error);
+      throw error;
     }
   }
 
@@ -55,8 +54,8 @@ export class Service {
       );
       return true;
     } catch (error) {
-      console.log("Appwrite Service :: DeletePost :: error", error);
-      return false;
+      console.error("Error deleting post:", error);
+      throw error;
     }
   }
 
@@ -68,8 +67,8 @@ export class Service {
         slug
       );
     } catch (error) {
-      console.log("Appwrite Service :: GetPost :: error", error);
-      return false;
+      console.error("Error fetching post:", error);
+      throw error;
     }
   }
 
@@ -81,12 +80,10 @@ export class Service {
         queries
       );
     } catch (error) {
-      console.log("Appwrite Service :: GetPosts :: error", error);
-      return false;
+      console.error("Error fetching posts:", error);
+      throw error;
     }
   }
-
-  //File Upload Service
 
   async uploadFile(file) {
     try {
@@ -96,8 +93,8 @@ export class Service {
         file
       );
     } catch (error) {
-      console.log("Appwrite Service :: UploadFile :: error", error);
-      return false;
+      console.error("Error uploading file:", error);
+      throw error;
     }
   }
 
@@ -106,8 +103,8 @@ export class Service {
       await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
       return true;
     } catch (error) {
-      console.log("Appwrite Service :: DeleteFile :: error", error);
-      return false;
+      console.error("Error deleting file:", error);
+      throw error;
     }
   }
 

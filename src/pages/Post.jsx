@@ -9,32 +9,41 @@ export default function Post() {
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
   const { slug } = useParams();
-
   const userData = useSelector((state) => state.auth.userData);
-
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
   useEffect(() => {
-    if (slug) {
-      appwriteService.getPost(slug).then((post) => {
-        if (post) {
-          setPost(post);
+    const fetchPost = async () => {
+      try {
+        const fetchedPost = await appwriteService.getPost(slug);
+        if (fetchedPost) {
+          setPost(fetchedPost);
         } else {
           navigate("/");
         }
-      });
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        navigate("/");
+      }
+    };
+
+    if (slug) {
+      fetchPost();
     } else {
       navigate("/");
     }
   }, [slug, navigate]);
 
-  const deletePost = () => {
-    appwriteService.deletePost(post.$id).then((status) => {
+  const deletePost = async () => {
+    try {
+      const status = await appwriteService.deletePost(post.$id);
       if (status) {
-        appwriteService.deleteFile(post.featuredImage);
+        await appwriteService.deleteFile(post.featuredImage);
         navigate("/");
       }
-    });
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   return post ? (

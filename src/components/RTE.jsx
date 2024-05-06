@@ -12,9 +12,9 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
+            apiKey="n834phwpgfc9d4aayr1uy39sbt5hao64p7g4n0336iakr7sx"
             initialValue={defaultValue}
             init={{
-              initialValue: defaultValue,
               height: 500,
               menubar: true,
               plugins: [
@@ -45,6 +45,7 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             }}
             onEditorChange={onChange}
+            onError={(err) => console.error("RTE Error:", err)}
           />
         )}
       />

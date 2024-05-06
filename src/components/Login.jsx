@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import authService from "../appwrite/auth";
-import { login as authLogin } from "../store/authSlice";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Input, Button, Logo } from "./index";
+import { login as authLogin } from "../store/authSlice";
+import { Button, Input, Logo } from "./index";
+import { useDispatch } from "react-redux";
+import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [error, setError] = useState("");
 
   const login = async (data) => {
@@ -28,9 +32,7 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center w-full">
-      <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
+      <div className="w-full max-w-lg p-10 mx-auto bg-gray-100 border rounded-xl border-black/10">
         <div className="flex justify-center mb-2">
           <span className="inline-block w-full max-w-[100px]">
             <Logo width="100%" />
@@ -40,15 +42,15 @@ function Login() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-base text-center text-black/60">
-          Don&apos;t have any account?&nbsp;
+          Don&apos;t have any account?{" "}
           <Link
             to="/signup"
             className="font-medium transition-all duration-200 text-primary hover:underline"
           >
-            Sing up
+            Sign Up
           </Link>
         </p>
-        {error && <p className="mt-8 text-center text-red-600">{error}</p>}
+        {error && <p className="mt-4 text-center text-red-600">{error}</p>}
         <form onSubmit={handleSubmit(login)} className="mt-8">
           <div className="space-y-5">
             <Input
@@ -56,25 +58,30 @@ function Login() {
               placeholder="Enter your email"
               type="email"
               {...register("email", {
-                required: true,
-                validate: {
-                  matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                    "Email address must be a valid address",
+                required: "Email is required",
+                pattern: {
+                  value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                  message: "Email address must be valid",
                 },
               })}
             />
+            {errors.email && (
+              <p className="text-red-600">{errors.email.message}</p>
+            )}
             <Input
               label="Password: "
-              placeholder="Enter your password"
               type="password"
+              placeholder="Enter your password"
               {...register("password", {
-                required: true,
+                required: "Password is required",
               })}
             />
-            <button type="submit" className="w-full">
+            {errors.password && (
+              <p className="text-red-600">{errors.password.message}</p>
+            )}
+            <Button type="submit" className="w-full">
               Sign in
-            </button>
+            </Button>
           </div>
         </form>
       </div>

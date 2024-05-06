@@ -1,10 +1,12 @@
 import React from "react";
-import { Signup as signupComponent } from "../components";
+import { Signup as SignupComponent, Container } from "../components";
 
 function Signup() {
   return (
     <div className="py-8">
-      <signupComponent />
+      <Container>
+        <SignupComponent />
+      </Container>
     </div>
   );
 }

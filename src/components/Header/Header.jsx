@@ -34,10 +34,11 @@ function Header() {
       active: authStatus,
     },
   ];
+
   return (
     <header className="py-3 bg-gray-500 shadow">
       <Container>
-        <nav className="flex">
+        <nav className="flex items-center justify-between">
           <div className="mr-4">
             <Link to="/">
               <Logo width="70px" />
@@ -47,12 +48,12 @@ function Header() {
             {navItem.map((item) =>
               item.active ? (
                 <li key={item.name}>
-                  <button
-                    onClick={() => navigate(item.slug)}
-                    className="px-6 py-2 duration-200 rounded-full inline-bock hover:bg-blue-100"
+                  <Link
+                    to={item.slug}
+                    className="px-4 py-2 text-white transition duration-200 rounded-md hover:bg-gray-600"
                   >
                     {item.name}
-                  </button>
+                  </Link>
                 </li>
               ) : null
             )}

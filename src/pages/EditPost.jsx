@@ -6,28 +6,36 @@ import appwriteService from "../appwrite/config";
 
 function EditPost() {
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { slug } = useParams();
 
   useEffect(() => {
     if (slug) {
-      appwriteService.getPost(slug).then((post) => {
-        if (post) {
-          setPost(post);
-        }
-      });
+      appwriteService
+        .getPost(slug)
+        .then((post) => {
+          if (post) {
+            setPost(post);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching post:", error);
+          navigate("/"); // Redirect to home page on error
+        })
+        .finally(() => setLoading(false));
     } else {
       navigate("/");
     }
   }, [slug, navigate]);
 
-  return post ? (
+  return (
     <div className="py-8">
       <Container>
-        <PostForm post={post} />
+        {loading ? <p>Loading...</p> : post ? <PostForm post={post} /> : null}
       </Container>
     </div>
-  ) : null;
+  );
 }
 
 export default EditPost;

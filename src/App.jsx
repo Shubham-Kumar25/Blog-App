@@ -23,17 +23,23 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  return !loading ? (
+  return (
     <div className="flex flex-wrap content-between min-h-screen">
       <div className="block w-full">
         <Header />
-        <main>
-          <Outlet />
-        </main>
+        {loading ? (
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="spinner"></div> {/* This is your spinner */}
+          </div>
+        ) : (
+          <main>
+            <Outlet />
+          </main>
+        )}
         <Footer />
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default App;

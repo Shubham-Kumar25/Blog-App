@@ -1,6 +1,9 @@
-import React, { useId } from "react";
+import React, { forwardRef, useId } from "react";
 
-function Select({ label, options = [], className, ...props }, ref) {
+function Select(
+  { label, options = [], className, defaultValue, ...props },
+  ref
+) {
   const id = useId();
 
   return (
@@ -10,6 +13,7 @@ function Select({ label, options = [], className, ...props }, ref) {
         {...props}
         id={id}
         ref={ref}
+        defaultValue={defaultValue}
         className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
       >
         {options?.map((option) => (
@@ -22,4 +26,4 @@ function Select({ label, options = [], className, ...props }, ref) {
   );
 }
 
-export default React.forwardRef(Select);
+export default forwardRef(Select);
